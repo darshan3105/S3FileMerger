@@ -1,10 +1,18 @@
 package com.github.darshan3105.utils;
 
+import static com.github.darshan3105.constants.CommonConstants.NEW_LINE;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.amazonaws.services.s3.model.PartETag;
+import com.github.darshan3105.constants.CommonConstants;
+import com.github.darshan3105.models.FileMergingUploadResponse;
+import com.github.darshan3105.models.MultiPartUploadRequest;
+import com.github.darshan3105.models.MultiPartUploadResponse;
 import com.github.darshan3105.models.S3FileMergingResponse;
+import com.github.darshan3105.models.S3Parts;
 
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -14,8 +22,6 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public final class S3FileMergingUtils {
-
-    private static final String NEW_LINE = "\n";
 
     private S3FileMergingUtils() {
 
@@ -71,5 +77,24 @@ public final class S3FileMergingUtils {
         final String resultFilePath) {
         return S3FileMergingResponse.builder().bucketName(bucketName)
             .resultFilePath(resultFilePath).build();
+    }
+
+    public static MultiPartUploadRequest generateMultiPartUploadRequest(
+        final String sourceBucketName, final String destinationBucketName, final String uploadId,
+        final S3Parts s3Parts, final int startPartNumber, final boolean shouldManageHeaders) {
+        return MultiPartUploadRequest.builder().sourceBucketName(sourceBucketName)
+            .destinationBucketName(destinationBucketName).uploadId(uploadId).s3Parts(s3Parts)
+            .startPartNumber(startPartNumber).shouldManageHeaders(shouldManageHeaders).build();
+    }
+
+    public static MultiPartUploadResponse generateMultiPartUploadResponse(final int nextPartNumber,
+        final List<PartETag> partETags) {
+        return MultiPartUploadResponse.builder().nextPartNumber(nextPartNumber).partETags(partETags)
+            .build();
+    }
+
+    public static FileMergingUploadResponse generateFileMergingUploadResponse(
+        final String bucketName, final String s3Key) {
+        return FileMergingUploadResponse.builder().bucketName(bucketName).s3Key(s3Key).build();
     }
 }

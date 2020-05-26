@@ -1,11 +1,13 @@
 package com.github.darshan3105.utils;
 
+import static com.github.darshan3105.constants.CommonConstants.MAXIMUM_PART_SIZE;
+import static com.github.darshan3105.constants.CommonConstants.MINIMUM_PART_SIZE;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import com.github.darshan3105.exceptions.FileMergingException;
@@ -21,9 +23,6 @@ public final class S3Utils {
     private static final boolean INVALID = false;
     private static final boolean USE_MULTIPART_UPLOAD = true;
     private static final boolean DO_NOT_USE_MULTIPART_UPLOAD = false;
-    private static final long MB = FileUtils.ONE_MB;
-    private static final long MAXIMUM_PART_SIZE = 100 * MB;
-    private static final long MINIMUM_PART_SIZE = 5 * MB;
 
     private S3Utils() {
 
