@@ -1,11 +1,11 @@
 # S3FileMerger
 A tool written in Java for merging AWS S3 files efficiently.
 
-##Description
+## Description ##
 This tool provides an efficient way of merging files in AWS S3. For more information 
 on how this tool is implemented refer "this(TBD)" post.
 
-##Install
+## Install ##
 - This Maven project is not handled by the Maven central repository. Thus the user needs
 to install it manually in his/her project. 
 - Clone this repo in your system using command:
@@ -14,7 +14,7 @@ to install it manually in his/her project.
 [this](https://devcenter.heroku.com/articles/local-maven-dependencies)
 for  information about how to add a library in your Maven project.
 
-##Run
+## Run ##
 You can use this tool in the following way:
 - create an object of class [S3FileMergingRequest](https://github.com/darshan3105/S3FileMerger/blob/master/src/main/java/com/github/darshan3105/models/S3FileMergingRequest.java)
 - call the S3FileMerger:
