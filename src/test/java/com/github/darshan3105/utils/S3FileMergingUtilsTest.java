@@ -20,7 +20,7 @@ public class S3FileMergingUtilsTest {
 
     private static final String NEW_LINE = "\n";
 
-    @Test(expected = NullPointerException.class)
+    @Test (expected = NullPointerException.class)
     public void testMergeS3Files_ShouldThrowNullPointerException_ForNullObjectsContent() {
         S3FileMergingUtils.mergeS3Files(null, true);
     }

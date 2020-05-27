@@ -24,6 +24,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.apache.commons.io.IOUtils;
 
 import com.amazonaws.AmazonServiceException;
@@ -52,7 +54,7 @@ public class FileMergingUploadHelper {
 
     private final S3Helper s3Helper;
 
-
+    @Inject
     public FileMergingUploadHelper(@NonNull final S3Helper s3Helper) {
         this.s3Helper = s3Helper;
     }
@@ -93,15 +95,15 @@ public class FileMergingUploadHelper {
         S3Parts s3Parts = chunkBySize(fileMergingUploadRequest.getS3KeysInfo());
         String uploadId = s3Helper.startMultiPartUpload(destinationBucketName, mergedFileS3Key);
         try {
-            MultiPartUploadResponse smallS3KeysMultiPartResponse =
-                handleMultiPartUploadForKeysBelowMaximumPartSize(
-                    generateMultiPartUploadRequest(sourceBucketName, destinationBucketName,
-                        uploadId, s3Parts, 1, fileMergingUploadRequest.isShouldManageHeaders()),
-                    mergedFileS3Key);
             MultiPartUploadResponse largeS3KeysMultiPartResponse =
                 handleMultiPartUploadForKeysAboveMaximumPartSize(
                     generateMultiPartUploadRequest(sourceBucketName, destinationBucketName,
-                        uploadId, s3Parts, smallS3KeysMultiPartResponse.getNextPartNumber(),
+                        uploadId, s3Parts, 1,
+                        fileMergingUploadRequest.isShouldManageHeaders()), mergedFileS3Key);
+            MultiPartUploadResponse smallS3KeysMultiPartResponse =
+                handleMultiPartUploadForKeysBelowMaximumPartSize(
+                    generateMultiPartUploadRequest(sourceBucketName, destinationBucketName,
+                        uploadId, s3Parts, largeS3KeysMultiPartResponse.getNextPartNumber(),
                         fileMergingUploadRequest.isShouldManageHeaders()), mergedFileS3Key);
             List<PartETag> partETags = getPartETags(smallS3KeysMultiPartResponse.getPartETags(),
                 largeS3KeysMultiPartResponse.getPartETags());
@@ -157,9 +159,19 @@ public class FileMergingUploadHelper {
                     partETags.add(s3Helper.uploadPart(destinationBucketName, mergerFileS3Key,
                         uploadId, partNumber, mergedContent));
                     currentSize = currentLine.getBytes(Charset.defaultCharset()).length;
-                    currentPart = Arrays.asList(currentLine);
+                    currentPart = new ArrayList<String>(){{
+                        add(currentLine);
+                    }};
                     partNumber++;
                 }
+            }
+            if(!currentPart.isEmpty()){
+                List<List<String>> content = Arrays.asList(currentPart);
+                String mergedContent = getMergedObject(
+                    multiPartUploadRequest.isShouldManageHeaders(), content, partNumber);
+                partETags.add(s3Helper.uploadPart(destinationBucketName, mergerFileS3Key,
+                    uploadId, partNumber, mergedContent));
+                partNumber++;
             }
         }
         return generateMultiPartUploadResponse(partNumber, partETags);

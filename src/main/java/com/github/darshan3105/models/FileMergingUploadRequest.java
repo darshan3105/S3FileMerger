@@ -18,6 +18,5 @@ public class FileMergingUploadRequest {
     private List<S3KeyInfo> s3KeysInfo;
     @NonNull
     private String mergedFileS3KeyPrefix;
-    @NonNull
     private boolean shouldManageHeaders;
 }

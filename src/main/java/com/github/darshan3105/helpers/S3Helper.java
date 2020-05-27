@@ -3,6 +3,8 @@ package com.github.darshan3105.helpers;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.commons.io.IOUtils;
 
 import com.amazonaws.services.s3.AmazonS3;
@@ -21,6 +23,7 @@ public class S3Helper {
 
     private final AmazonS3 amazonS3;
 
+    @Inject
     public S3Helper(@NonNull final  AmazonS3 amazonS3) {
         this.amazonS3 = amazonS3;
     }

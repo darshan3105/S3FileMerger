@@ -9,7 +9,7 @@
   <version>1.0</version>
 
   <properties>
-    <maven.compiler.release>12</maven.compiler.release>
+    <maven.compiler.release>8</maven.compiler.release>
   </properties>
 
   <build>
@@ -21,6 +21,7 @@
         <configuration>
           <source>8</source>
           <target>8</target>
+          <useIncrementalCompilation>false</useIncrementalCompilation>
         </configuration>
       </plugin>
     </plugins>
@@ -35,6 +36,11 @@
     <dependency>
       <groupId>com.google.dagger</groupId>
       <artifactId>dagger</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.dagger</groupId>
+      <artifactId>dagger-compiler</artifactId>
       <version>2.0</version>
     </dependency>
     <dependency>
