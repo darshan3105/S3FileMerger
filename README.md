@@ -3,7 +3,7 @@ A tool written in Java for merging AWS S3 files efficiently.
 
 ## Description ##
 This tool provides an efficient way of merging files in AWS S3. For more information 
-on how this tool is implemented refer "this(TBD)" post.
+on how this tool is implemented refer [this](https://medium.com/@darshanprabhune31/how-to-merge-files-in-aws-s3-efficiently-using-java-sdk-7e4f294c9b61?source=friends_link&sk=26432efef48d4e387acbc55dc37a50d2) post.
 
 ## Install ##
 - This Maven project is not handled by the Maven central repository. Thus the user needs
